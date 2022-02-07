@@ -1,34 +1,37 @@
 ---
 # defaults file for create_vm_using_cloud-init
 # do not overwrite dicts directly - ansible will overwrite, not append. instead use combine_ vars, which will be merged in a task
+# prereqs:
+# 1. image downloaded
+# 2. SEL of dir.libvirt(if custom location) - semanage fcontext -at virt_image_t "/media/ssd/libvirt_images/(.*)?"
 
 # parameters of created vm
 combine_vm: {}
 vm:
-  hostname: foo
-  template: fedora-34-kde
+  hostname:
+  template:
   net:
-    ip: 192.168.122.5
-    gw: 192.168.122.1
-    dns: 192.168.122.1
+    ip:
+    gw:
+    dns:
   user:
-    name: remote
-    ssh_IdentityFile: /home/user1/.ssh/id_ed25519
+    name:
+    ssh_IdentityFile:
 
 combine_dir: {}
 dir:
-  libvirt: /var/lib/libvirt/images/ # dir where libvirt images are located
+  libvirt: /media/ssd/libvirt_images # dir where libvirt images are saved. iso is later appended
   user_data: /tmp/{{ vm.hostname }} # tmp dir for j2 output
 
 # each key must have matching j2 entry
 combine_templates: {}
 templates:
-  fedora-34:
-    iso: Fedora-Cloud-Base-34-1.2.x86_64.qcow2
-    variant: fedora34 # libvirt internal variable
-  fedora-34-kde:
-    iso: Fedora-Cloud-Base-34-1.2.x86_64.qcow2
-    variant: fedora34
+  fedora-35:
+    iso: Fedora-Cloud-Base-35-1.2.x86_64.qcow2
+    variant: fedora35 # libvirt internal variable
+  fedora-35-kde:
+    iso: Fedora-Cloud-Base-35-1.2.x86_64.qcow2
+    variant: fedora35
   centos-8:
     iso: CentOS-8-GenericCloud-8.3.2011-20201204.2.x86_64.qcow2
     variant: centos8

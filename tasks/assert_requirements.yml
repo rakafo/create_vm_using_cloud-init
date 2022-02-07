@@ -1,0 +1,38 @@
+- name: check that image exists
+  block:
+    - name: get {{ dir.libvirt }}/iso/{{ templates[vm.template].iso }} stats
+      stat:
+        path: "{{ dir.libvirt }}/iso/{{ templates[vm.template].iso }}"
+      register: this
+
+    - name: assert that image exists
+      assert:
+        that: this.stat.exists
+        fail_msg: image {{ dir.libvirt }}/iso/{{ templates[vm.template].iso }} doesn't exist
+
+- name: check that hostname isn't taken
+  block:
+    - name: get file {{ vm.hostname }}.qcow2 stats
+      stat:
+        path: "{{ dir.libvirt }}/{{ vm.hostname }}.qcow2"
+      register: this
+
+    - name: assert that it doesn't exist
+      assert:
+        that: not this.stat.exists
+        fail_msg: "{{ vm.hostname }}.qcow2 already exists"
+
+- name: check that vars are populated
+  block:
+    - name: check that vars are populated
+      assert:
+        that: "{{ item }} != None"
+        fail_msg: "{{ item }} must be set"
+      loop:
+        - vm.hostname
+        - vm.template
+        - vm.net.ip
+        - vm.net.gw
+        - vm.net.dns
+        - vm.user.name
+        - vm.user.ssh_IdentityFile

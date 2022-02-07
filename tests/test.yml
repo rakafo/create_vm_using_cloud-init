@@ -6,9 +6,12 @@
     - role: create_vm_using_cloud-init
       vars:
         combine_vm:
-          hostname: f34-test
-          template: fedora-34
-          net: { ip: 192.168.122.31 }
+          hostname: f35-1
+          template: fedora-35-kde
+          net:
+            ip: 192.168.122.21
+            gw: 192.168.122.1
+            dns: 192.168.122.1
           user:
             name: remote
             ssh_IdentityFile: /home/user1/.ssh/id_ed25519

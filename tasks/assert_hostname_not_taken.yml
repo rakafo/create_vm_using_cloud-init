@@ -1,9 +1,0 @@
-- name: get file {{ vm.hostname }}.qcow2 stats
-  stat:
-    path: "{{ dir.libvirt }}/{{ vm.hostname }}.qcow2"
-  register: this
-
-- name: check if {{ vm.hostname }}.qcow2 exists
-  assert:
-    that: not this.stat.exists
-    fail_msg: "{{ vm.hostname }}.qcow2 already exists"
