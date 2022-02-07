@@ -1,0 +1,14 @@
+---
+- hosts: localhost
+  gather_facts: no
+  become: yes
+  roles:
+    - role: create_vm_using_cloud-init
+      vars:
+        combine_vm:
+          hostname: f34-test
+          template: fedora-34
+          net: { ip: 192.168.122.31 }
+          user:
+            name: remote
+            ssh_IdentityFile: /home/user1/.ssh/id_ed25519

@@ -1,0 +1,7 @@
+---
+# tasks file for create_vm_using_cloud-init
+- import_tasks: combine_dicts.yml
+- import_tasks: assert_hostname_not_taken.yml
+- import_tasks: update_ssh_config.yml
+- import_tasks: create_vm.yml
+- import_tasks: add_to_known_hosts.yml

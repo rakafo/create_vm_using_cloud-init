@@ -1,0 +1,10 @@
+# 1 per fact. if using 1 set_fact with 3 facts, dir will not be updated.
+
+- set_fact:
+    vm: "{{ vm | combine(combine_vm, recursive=True) }}"
+
+- set_fact:
+    dir: "{{ dir | combine(combine_dir, recursive=True) }}"
+
+- set_fact:
+    templates: "{{ templates | combine(combine_templates, recursive=True) }}"

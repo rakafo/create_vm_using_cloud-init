@@ -1,0 +1,21 @@
+- name: get user running as sudo
+  command: logname
+  register: this
+
+- name: update ~/.ssh/config file
+  become_user: "{{ this.stdout }}"
+  blockinfile:
+    path: ~{{ this.stdout}}/.ssh/config
+    marker_begin: "BEGIN {{ vm.hostname }}"
+    block: |
+      Host {{ vm.hostname }}
+      ServerAliveInterval 30
+      IdentityFile {{ "~/" ~ vm.user.ssh_IdentityFile | regex_search(".ssh/.+") }}
+      Hostname {{ vm.net.ip }}
+      User {{ vm.user.name }}
+
+- name: fix formatting
+  replace:
+    path: ~{{ this.stdout}}/.ssh/config
+    regexp: "(# BEGIN {{ vm.hostname }} ANSIBLE MANAGED BLOCK)"
+    replace: \n\1

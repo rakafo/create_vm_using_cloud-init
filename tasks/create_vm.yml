@@ -1,0 +1,50 @@
+- name: generate user-data
+  template:
+    src: "templates/{{ vm.template }}.j2"
+    dest: "{{ dir.user_data }}"
+    owner: qemu
+    group: qemu
+
+- name: create base iso, based on cloud image
+  shell:
+    chdir: "{{ dir.libvirt }}"
+    cmd: |
+      qemu-img create \
+      -f qcow2 \
+      -b {{ dir.libvirt }}/iso/{{ templates[vm.template].iso }} \
+      -F qcow2 {{ dir.libvirt }}/{{ vm.hostname }}.qcow2 \
+      100G
+
+- name: set correct base iso permissions
+  file:
+    path: "{{ dir.libvirt }}/{{ vm.hostname }}.qcow2"
+    owner: qemu
+    group: qemu
+
+- name: create vm
+  shell:
+    chdir: "{{ dir.libvirt }}"
+    cmd: |
+      virt-install --name {{ vm.hostname }} \
+      --memory 2048 \
+      --os-variant={{ templates[vm.template].variant }} \
+      --noautoconsole \
+      --cloud-init user-data="{{ dir.user_data }}" \
+      --disk="{{ vm.hostname }}.qcow2"
+
+- name: waiting until VM finishes setup
+  shell: virsh list --all | grep {{ vm.hostname }}
+  register: this
+  until: this.stdout is search("shut off")
+  delay: 10
+  retries: 70
+  changed_when: no
+
+- name: starting VM
+  shell: virsh start {{ vm.hostname }}
+  register: this
+  failed_when: this.stdout is not search("started")
+  changed_when: no
+  
+- pause:
+    seconds: 30

@@ -1,0 +1,34 @@
+#cloud-config
+
+users:
+  - name: {{ vm.user.name }}
+    ssh_authorized_keys:
+      - {{ lookup('file', vm.user.ssh_IdentityFile~'.pub') }}
+    sudo: ['ALL=(ALL) NOPASSWD:ALL']
+    
+timezone: Europe/Vilnius
+
+packages:
+  - qemu-guest-agent
+
+# password login - for test purposes
+# ssh_pwauth: yes    
+# chpasswd:
+#  expire: false
+#  list:
+#    - user1:password
+
+# using this instead of meta-data, as it has a bug requiring interface cycle anyway
+bootcmd:
+  - nmcli con mod 'System eth0' ipv4.method manual ipv4.address {{ vm.net.ip }}/24 ipv4.gateway {{ vm.net.gw }} ipv4.dns {{ vm.net.dns }} autoconnect yes
+  - nmcli con down 'System eth0'
+  - nmcli con up 'System eth0'
+    
+runcmd:
+  - hostnamectl set-hostname {{ vm.hostname }}
+  - touch /etc/cloud/cloud-init.disabled
+  - systemctl enable --now qemu-guest-agent
+
+power_state:
+  mode: reboot
+  condition: True

@@ -1,0 +1,11 @@
+- name: get user running as sudo
+  command: logname
+  register: this
+  changed_when: no
+
+- name: add node to known_hosts
+  become: no
+  delegate_to: localhost
+  known_hosts:
+    name: "{{ vm.net.ip }}"
+    key: "{{ lookup('pipe', 'ssh-keyscan -t ed25519 ' ~ vm.net.ip ~ ' ' ~ vm.net.ip) }}"
