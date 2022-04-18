@@ -17,6 +17,7 @@ vm:
   user:
     name:
     ssh_IdentityFile:
+  size:
 
 combine_dir: {}
 dir:

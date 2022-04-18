@@ -13,7 +13,7 @@
       -f qcow2 \
       -b {{ dir.libvirt }}/iso/{{ templates[vm.template].iso }} \
       -F qcow2 {{ dir.libvirt }}/{{ vm.hostname }}.qcow2 \
-      100G
+      {{ vm.size }}
 
 - name: set correct base iso permissions
   file:
@@ -45,6 +45,6 @@
   register: this
   failed_when: this.stdout is not search("started")
   changed_when: no
-  
+
 - pause:
     seconds: 30
