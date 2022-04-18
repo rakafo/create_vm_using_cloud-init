@@ -6,10 +6,10 @@
     - role: create_vm_using_cloud-init
       vars:
         combine_vm:
-          hostname: f35-1
-          template: fedora-35-kde
+          hostname: al8-1
+          template: almalinux-8
           net:
-            ip: 192.168.122.21
+            ip: 192.168.122.22
             gw: 192.168.122.1
             dns: 192.168.122.1
           user:

@@ -35,3 +35,6 @@ templates:
   centos-8:
     iso: CentOS-8-GenericCloud-8.3.2011-20201204.2.x86_64.qcow2
     variant: centos8
+  almalinux-8:
+    iso: AlmaLinux-8-GenericCloud-8.5-20211119.x86_64.qcow2
+    variant: almalinux8
