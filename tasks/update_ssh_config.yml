@@ -6,16 +6,16 @@
   become_user: "{{ this.stdout }}"
   blockinfile:
     path: ~{{ this.stdout}}/.ssh/config
-    marker_begin: "BEGIN {{ vm.hostname }}"
-    block: |
-      Host {{ vm.hostname }}
-      ServerAliveInterval 30
-      IdentityFile {{ "~/" ~ vm.user.ssh_IdentityFile | regex_search(".ssh/.+") }}
-      Hostname {{ vm.net.ip }}
-      User {{ vm.user.name }}
+    marker: "# {mark} ANSIBLE MANAGED BLOCK {{ vm.hostname }}"
+    block: |2
+        Host {{ vm.hostname }}
+        ServerAliveInterval 30
+        IdentityFile {{ "~/" ~ vm.user.ssh_IdentityFile | regex_search(".ssh/.+") }}
+        Hostname {{ vm.net.ip }}
+        User {{ vm.user.name }}
 
-- name: fix formatting
+- name: insert an empty line before the marker line
   replace:
     path: ~{{ this.stdout}}/.ssh/config
-    regexp: "(# BEGIN {{ vm.hostname }} ANSIBLE MANAGED BLOCK)"
-    replace: \n\1
+    regexp: "(?<=.\n)# BEGIN ANSIBLE MANAGED"
+    replace: "\n# BEGIN ANSIBLE MANAGED"

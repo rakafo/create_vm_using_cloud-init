@@ -8,7 +8,7 @@
         combine_vm:
           hostname: al8-1
           template: almalinux-8
-          size: 100G
+          size: 200G
           net:
             ip: 192.168.122.22
             gw: 192.168.122.1

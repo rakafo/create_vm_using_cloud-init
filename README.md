@@ -1,15 +1,12 @@
 # Overview
 
-Create VM with cloud-init user-data, without using explicit meta-data .iso file.
+Create a VM with cloud-init user-data, without using explicit meta-data .iso file.
 
-vm.template options:
-
-1. centos-8
-2. fedora-34
-3. fedora-34-kde
+Templates: Almalinux 8, CentOS 8, Fedora 35.
 
 # Capabilities
 
+- unatended installation;
 - configures user, ssh, hostname;
 - configures static ip;
 
